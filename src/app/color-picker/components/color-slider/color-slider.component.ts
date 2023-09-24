@@ -16,18 +16,20 @@ export class ColorSliderComponent implements AfterViewInit {
   private mousedown: boolean = false
   private selectedHeight!: number
 
+  @HostListener('window:mouseup', ['$event']) onMouseUp(evt: MouseEvent) {
+    this.mousedown = false
+  }
+
   ngAfterViewInit() {
     this.draw()
   }
 
   draw() {
-
-      this.ctx = this.canvas.nativeElement.getContext('2d')
-
+    this.ctx = this.canvas.nativeElement.getContext('2d')
     const width = this.canvas.nativeElement.width
     const height = this.canvas.nativeElement.height
 
-    if(!this.ctx) return
+    if (!this.ctx) return
     this.ctx.clearRect(0, 0, width, height)
 
     const gradient = this.ctx.createLinearGradient(0, 0, 0, height)
@@ -56,11 +58,6 @@ export class ColorSliderComponent implements AfterViewInit {
     }
   }
 
-  @HostListener('window:mouseup', ['$event'])
-  onMouseUp(evt: MouseEvent) {
-    this.mousedown = false
-  }
-
   onMouseDown(evt: MouseEvent) {
     this.mousedown = true
     this.selectedHeight = evt.offsetY
@@ -82,7 +79,7 @@ export class ColorSliderComponent implements AfterViewInit {
   }
 
   getColorAtPosition(x: number, y: number) {
-    if(!this.ctx) return
+    if (!this.ctx) return
     const imageData = this.ctx.getImageData(x, y, 1, 1).data
     return (
       'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)'
